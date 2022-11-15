@@ -1,6 +1,8 @@
 package org.example.controller;
 
 import org.example.param.AddressListParam;
+import org.example.param.AddressRemoveParam;
+import org.example.pojo.Address;
 import org.example.service.AddressService;
 import org.example.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("user/address")
+@RequestMapping("/user/address")
 public class FrontAddressController {
 
     @Autowired
@@ -27,5 +29,19 @@ public class FrontAddressController {
         return addressService.list(addressListParam.getUserId());
     }
 
+    @PostMapping("save")
+    public R save(@RequestBody @Validated Address address, BindingResult result){
+        if (result.hasErrors()) {
+            return R.fail("参数异常，保存失败！");
+        }
+        return addressService.save(address);
+    }
 
+    @PostMapping("remove")
+    public R remove(@RequestBody @Validated AddressRemoveParam addressRemoveParam, BindingResult result){
+        if (result.hasErrors()) {
+            return R.fail("参数异常，删除失败");
+        }
+        return addressService.remove(addressRemoveParam.getAddressId());
+    }
 }

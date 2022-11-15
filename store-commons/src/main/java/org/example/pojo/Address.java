@@ -15,6 +15,7 @@ import java.io.Serializable;
 public class Address implements Serializable {
     public static final Long serialVersionUID = 1L;
 
+    @NotNull
     @TableId(type = IdType.AUTO)
     private Integer id;
     @NotBlank

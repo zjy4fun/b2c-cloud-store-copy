@@ -5,9 +5,13 @@ import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 
+/**
+ * 地址移除参数
+ */
 @Data
-public class AddressListParam {
+public class AddressRemoveParam {
+
     @NotNull
-    @JsonProperty("user_id")  //接收的时候指定属性 user_id
-    private Integer userId;
+    @JsonProperty("address_id")
+    private Integer addressId;
 }
