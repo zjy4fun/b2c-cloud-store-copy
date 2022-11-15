@@ -26,4 +26,6 @@ public class FrontAddressController {
         }
         return addressService.list(addressListParam.getUserId());
     }
+
+
 }
