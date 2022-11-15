@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import org.example.param.UserCheckParam;
+import org.example.pojo.User;
 import org.example.service.UserService;
 import org.example.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,4 +38,13 @@ public class UserController {
 
         return userService.check(userCheckParam);
     }
+    @PostMapping("register")
+    public R register(@RequestBody @Validated User user, BindingResult result) {
+        if (result.hasErrors()) {
+            //如果存在异常，证明请求参数不符合注解要求
+            return R.fail("参数异常，不可注册！");
+        }
+        return userService.register(user);
+    }
+
 }

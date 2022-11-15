@@ -1,6 +1,7 @@
 package org.example.service;
 
 import org.example.param.UserCheckParam;
+import org.example.pojo.User;
 import org.example.utils.R;
 
 public interface UserService {
@@ -10,4 +11,6 @@ public interface UserService {
      * @return
      */
     R check(UserCheckParam userCheckParam);
+
+    R register(User user);
 }
