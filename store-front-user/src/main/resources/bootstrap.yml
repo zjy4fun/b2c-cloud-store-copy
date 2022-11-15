@@ -5,4 +5,4 @@ spring:
     nacos:
       server-addr: 192.168.5.88:8848
 server:
-  port: 3001
+  port: 3000

@@ -12,6 +12,5 @@ import javax.validation.constraints.NotNull;
 public class AddressRemoveParam {
 
     @NotNull
-    @JsonProperty("address_id")
-    private Integer addressId;
+    private Integer id;
 }

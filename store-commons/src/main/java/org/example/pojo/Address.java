@@ -15,7 +15,6 @@ import java.io.Serializable;
 public class Address implements Serializable {
     public static final Long serialVersionUID = 1L;
 
-    @NotNull
     @TableId(type = IdType.AUTO)
     private Integer id;
     @NotBlank
@@ -25,6 +24,6 @@ public class Address implements Serializable {
     @NotBlank
     private String address;
     @NotNull
-    @TableField("user_id")
+    @TableField("user_id") //对应数据库表，不是json里面的字段
     private Integer userId;
 }

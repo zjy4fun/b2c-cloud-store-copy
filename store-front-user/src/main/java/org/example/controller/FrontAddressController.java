@@ -30,7 +30,7 @@ public class FrontAddressController {
     }
 
     @PostMapping("save")
-    public R save(@RequestBody @Validated Address address, BindingResult result){
+    public R save(@RequestBody @Validated Address address, BindingResult result){ //直接复用 Address 实体类，json传参的时候应该注意字段名需要保持一致
         if (result.hasErrors()) {
             return R.fail("参数异常，保存失败！");
         }
@@ -42,6 +42,6 @@ public class FrontAddressController {
         if (result.hasErrors()) {
             return R.fail("参数异常，删除失败");
         }
-        return addressService.remove(addressRemoveParam.getAddressId());
+        return addressService.remove(addressRemoveParam.getId());
     }
 }
