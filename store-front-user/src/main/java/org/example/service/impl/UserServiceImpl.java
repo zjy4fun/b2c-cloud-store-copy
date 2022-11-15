@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.constants.UserConstants;
 import org.example.mapper.UserMapper;
 import org.example.param.UserCheckParam;
+import org.example.param.UserLoginParam;
 import org.example.pojo.User;
 import org.example.service.UserService;
 import org.example.utils.MD5Util;
@@ -85,5 +86,35 @@ public class UserServiceImpl implements UserService {
         log.info("UserServiceImpl.register 业务结束，结果: {}", "注册成功!");
 
         return R.ok("注册成功！");
+    }
+
+    /**
+     * 登录业务：
+     * 1. 密码的加密和加盐处理
+     * 2. 账号和密码进行数据库查询，返回一个完整的数据库 user 对象
+     * 3. 判断返回结果
+     * @param userLoginParam  账号和密码 已经校验 但是密码是明文
+     * @return 结果 001  004
+     */
+    @Override
+    public R login(UserLoginParam userLoginParam) {
+        //1. 密码处理
+        String newPwd = MD5Util.encode(userLoginParam.getPassword() + UserConstants.USER_SALT);
+
+        //2. 数据库查询
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_name", userLoginParam.getUserName());
+        queryWrapper.eq("password", newPwd);
+
+        User user = userMapper.selectOne(queryWrapper);
+        //3. 结果处理
+        if (user == null) {
+            log.info("UserServiceImpl.login 业务结束，结果:{}", "账号和密码错误!");
+            return R.fail("账号或者密码错误!");
+        }
+        log.info("UserServiceImpl.login 业务结束，结果:{}", "登录成功!");
+        // 不返回 password !!!
+        user.setPassword(null);
+        return R.ok("登录成功！", user);
     }
 }

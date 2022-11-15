@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import org.example.param.UserCheckParam;
+import org.example.param.UserLoginParam;
 import org.example.pojo.User;
 import org.example.service.UserService;
 import org.example.utils.R;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.naming.Binding;
 
 /**
  * 用户模块的控制器类
@@ -47,4 +50,11 @@ public class UserController {
         return userService.register(user);
     }
 
+    @PostMapping("login")
+    public R login(@RequestBody @Validated UserLoginParam userLoginParam, BindingResult result) {
+        if (result.hasErrors()) {
+            return R.fail("参数异常，不可登录!");
+        }
+        return userService.login(userLoginParam);
+    }
 }
