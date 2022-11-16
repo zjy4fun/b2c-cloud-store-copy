@@ -3,6 +3,6 @@ spring:
     name: user-service
   cloud:
     nacos:
-      server-addr: 192.168.5.88:8848
+      server-addr: 117.50.184.18:8848
 server:
   port: 3000

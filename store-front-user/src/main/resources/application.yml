@@ -1,7 +1,7 @@
 spring:
   # 连接池配置
   datasource:
-    url: jdbc:mysql://192.168.5.88:3306/store_user?useSSL=false&useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://117.50.184.18:3306/store_user?useSSL=false&useUnicode=true&characterEncoding=UTF-8
     username: root
     password: root
     driver-class-name: com.mysql.jdbc.Driver
