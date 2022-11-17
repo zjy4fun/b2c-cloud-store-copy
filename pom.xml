@@ -8,7 +8,6 @@
     <modules>
         <module>store-gateway</module>
         <module>store-commons</module>
-        <module>store-commons</module>
         <module>store-front-user</module>
         <module>store-static</module>
     </modules>
