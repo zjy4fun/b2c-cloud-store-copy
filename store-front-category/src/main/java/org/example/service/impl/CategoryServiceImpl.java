@@ -3,11 +3,14 @@ package org.example.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.example.mapper.CategoryMapper;
+import org.example.param.ProductHotParam;
 import org.example.pojo.Category;
 import org.example.service.CategoryService;
 import org.example.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @Slf4j
@@ -30,5 +33,19 @@ public class CategoryServiceImpl implements CategoryService {
         }
         log.info("CategoryServiceImpl.byName业务结束，结果: 类别查询成功");
         return R.ok("类别查询成功", category);
+    }
+
+    @Override
+    public R hotsCategory(ProductHotParam productHotParam) {
+        //1. 封装查询参数
+        QueryWrapper<Category> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in("category_name", productHotParam.getCategoryName());
+        queryWrapper.select("category_id");
+
+        //2. 查询数据库
+        List<Object> ids = categoryMapper.selectObjs(queryWrapper);
+        R ok = R.ok("类别集合查询成功", ids);
+        log.info("CategoryServiceImpl.hotsCategory业务结束，结果：{}", ok);
+        return ok;
     }
 }

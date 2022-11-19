@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.example.clients.CategoryClient;
 import org.example.mapper.ProductMapper;
+import org.example.param.ProductHotParam;
 import org.example.pojo.Product;
 import org.example.service.ProductService;
 import org.example.utils.R;
@@ -50,5 +51,40 @@ public class ProductServiceImpl implements ProductService {
         log.info("ProductServiceImpl.promo业务结束，结果:{}", productList);
 
         return R.ok("数据查询成功", productList);
+    }
+
+    /**
+     * 多类别热门商品查询，根据类别名称集合，至多查询 7 条
+     *    1. 调用类别服务
+     *    2. 类别集合 id 查询商品
+     *    3. 结果集封装即可
+     * @param productHotParam 类别名称集合
+     * @return r
+     */
+    @Override
+    public R hots(ProductHotParam productHotParam) {
+        R r = categoryClient.hots(productHotParam);
+        if (r.getCode().equals(R.FAIL_CODE)) {
+            log.info("ProductServiceImpl.hots业务结束，结果:{}", r.getMsg());
+            return r;
+        }
+        List<Object> ids = (List<Object>)r.getData();
+
+        //进行商品数据查询
+        QueryWrapper<Product> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in("category_id", ids);
+        queryWrapper.orderByDesc("product_sales");
+
+        IPage<Product> page = new Page<>(1, 7);
+
+        page = productMapper.selectPage(page, queryWrapper);
+
+        List<Product> records = page.getRecords();
+
+        R ok = R.ok("多类别热门商品查询成功！", records);
+
+        log.info("ProductServiceImpl.hots业务结束，结果：{}", ok);
+
+        return ok;
     }
 }

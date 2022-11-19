@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import org.example.param.ProductHotParam;
 import org.example.param.ProductPromoParam;
 import org.example.service.ProductService;
 import org.example.utils.R;
@@ -25,4 +26,13 @@ public class ProductController {
         }
         return productService.promo(productPromoParam.getCategoryName());
     }
+
+    @PostMapping("hots")
+    public R hots(@RequestBody @Validated ProductHotParam productHotParam, BindingResult result) {
+        if (result.hasErrors()) {
+            return R.fail("数据查询失败！");
+        }
+        return productService.hots(productHotParam);
+    }
+
 }
