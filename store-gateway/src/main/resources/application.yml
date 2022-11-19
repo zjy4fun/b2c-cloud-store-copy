@@ -20,3 +20,11 @@ spring:
           uri: lb://carousel-service #静态资源处理以及oss上传服务!
           predicates:
             - Path=/carousel/**
+        - id: product-service # 此名称随意定义
+          uri: lb://product-service #使用负载均衡,调用服务名,这是服务名
+          predicates:
+            - Path=/product/** # 访问product相关,转发到product服务
+        - id: category-service  # 类别服务
+          uri: lb://category-service
+          predicates:
+            - Path=/category/**

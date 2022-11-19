@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: category-service
+  cloud:
+    nacos:
+      server-addr: 117.50.184.18:8848
+server:
+  port: 3005
