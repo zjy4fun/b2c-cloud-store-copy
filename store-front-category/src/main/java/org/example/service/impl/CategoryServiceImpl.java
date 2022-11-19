@@ -15,12 +15,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     private CategoryMapper categoryMapper;
+
     @Override
     public R byName(String categoryName) {
         //1. 封装查询参数
         QueryWrapper<Category> categoryQueryWrapper = new QueryWrapper<>();
         categoryQueryWrapper.eq("category_name", categoryName);
-        log.info("categoryName: " + categoryName);
         //2. 查询数据库
         Category category = categoryMapper.selectOne(categoryQueryWrapper);
         //3. 结果封装
