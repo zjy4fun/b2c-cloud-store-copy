@@ -12,4 +12,6 @@ public interface ProductService {
      * @return
      */
     R hots(ProductHotParam productHotParam);
+
+    R clist();
 }

@@ -48,4 +48,17 @@ public class CategoryServiceImpl implements CategoryService {
         log.info("CategoryServiceImpl.hotsCategory业务结束，结果：{}", ok);
         return ok;
     }
+
+    /**
+     * 返回所有类别信息
+     * @return
+     */
+    @Override
+    public R list() {
+        QueryWrapper<Category> queryWrapper = new QueryWrapper<>();
+        List<Category> categories = categoryMapper.selectList(queryWrapper);
+        R ok = R.ok("类别信息查询成功", categories);
+        log.info("CategoryServiceImpl.list业务结束，结果:{}", ok);
+        return ok;
+    }
 }

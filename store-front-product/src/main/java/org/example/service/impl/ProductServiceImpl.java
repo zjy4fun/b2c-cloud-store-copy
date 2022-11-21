@@ -87,4 +87,15 @@ public class ProductServiceImpl implements ProductService {
 
         return ok;
     }
+
+    /**
+     * 查询类别商品集合
+     * @return
+     */
+    @Override
+    public R clist() {
+        //todo 这里应该怎么处理
+        log.info("ProductServiceImpl.clist服务结束，结果:{}");
+        return R.ok("");
+    }
 }
