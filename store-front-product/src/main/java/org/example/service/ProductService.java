@@ -3,7 +3,10 @@ package org.example.service;
 import org.example.param.ProductHotParam;
 import org.example.param.ProductParamInteger;
 import org.example.param.ProductParamsSearch;
+import org.example.pojo.Product;
 import org.example.utils.R;
+
+import java.util.List;
 
 public interface ProductService {
     R promo(String categoryName);
@@ -50,4 +53,10 @@ public interface ProductService {
     Object pictures(Integer productID);
 
     Object search(ProductParamsSearch productParamsSearch);
+
+    /**
+     * 查询全部商品信息
+     * @return
+     */
+    List<Product> list();
 }

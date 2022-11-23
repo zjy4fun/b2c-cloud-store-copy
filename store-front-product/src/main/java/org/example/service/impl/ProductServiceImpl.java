@@ -169,4 +169,10 @@ public class ProductServiceImpl implements ProductService {
 
         return r;
     }
+
+    @Override
+    public List<Product> list() {
+        List<Product> products = productMapper.selectList(null);
+        return products;
+    }
 }

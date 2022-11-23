@@ -4,16 +4,15 @@ import org.example.param.ProductHotParam;
 import org.example.param.ProductParamInteger;
 import org.example.param.ProductParamsSearch;
 import org.example.param.ProductPromoParam;
+import org.example.pojo.Product;
 import org.example.service.ProductService;
 import org.example.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -74,5 +73,10 @@ public class ProductController {
     @PostMapping("search")
     public Object search(@RequestBody ProductParamsSearch productParamsSearch) {
         return productService.search(productParamsSearch);
+    }
+
+    @GetMapping("list")
+    public List<Product> list() {
+        return productService.list();
     }
 }
