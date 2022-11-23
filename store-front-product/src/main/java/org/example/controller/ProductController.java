@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("product")
 public class ProductController {
@@ -54,5 +56,11 @@ public class ProductController {
     @PostMapping("all")
     public Object all(@RequestBody ProductParamInteger productParamInteger) {
         return productService.all(productParamInteger);
+    }
+
+    @PostMapping("detail")
+    public Object detail(@RequestBody Map<String, Integer> param) {
+        Integer productID = param.get("productID");
+        return productService.detail(productID);
     }
 }

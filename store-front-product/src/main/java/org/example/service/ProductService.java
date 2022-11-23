@@ -33,4 +33,11 @@ public interface ProductService {
      * @return
      */
     Object all(ProductParamInteger productParamInteger);
+
+    /**
+     * 查询商品详情
+     * @param productID
+     * @return
+     */
+    Object detail(Integer productID);
 }

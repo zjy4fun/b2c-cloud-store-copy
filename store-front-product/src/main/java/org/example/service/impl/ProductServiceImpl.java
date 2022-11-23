@@ -126,4 +126,13 @@ public class ProductServiceImpl implements ProductService {
     public Object all(ProductParamInteger productParamInteger) {
         return byCategory(productParamInteger);
     }
+
+    @Override
+    public Object detail(Integer productID) {
+        Product product = productMapper.selectById(productID);
+        R ok = R.ok(product);
+        log.info("ProductServiceImpl.detail业务结束，结果：{}", ok);
+
+        return ok;
+    }
 }
