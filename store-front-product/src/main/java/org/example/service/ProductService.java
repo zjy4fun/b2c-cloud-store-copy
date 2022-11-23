@@ -2,6 +2,7 @@ package org.example.service;
 
 import org.example.param.ProductHotParam;
 import org.example.param.ProductParamInteger;
+import org.example.param.ProductParamsSearch;
 import org.example.utils.R;
 
 public interface ProductService {
@@ -47,4 +48,6 @@ public interface ProductService {
      * @return
      */
     Object pictures(Integer productID);
+
+    Object search(ProductParamsSearch productParamsSearch);
 }

@@ -5,15 +5,18 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.example.clients.CategoryClient;
+import org.example.clients.SearchClient;
 import org.example.mapper.PictureMapper;
 import org.example.mapper.ProductMapper;
 import org.example.param.ProductHotParam;
 import org.example.param.ProductParamInteger;
+import org.example.param.ProductParamsSearch;
 import org.example.pojo.Picture;
 import org.example.pojo.Product;
 import org.example.service.ProductService;
 import org.example.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
@@ -26,6 +29,9 @@ public class ProductServiceImpl implements ProductService {
     //引入 feign 客户端需要在启动类添加配置注解
     @Autowired
     private CategoryClient categoryClient;
+
+    @Autowired
+    private SearchClient searchClient;
 
     @Autowired
     private ProductMapper productMapper;
@@ -151,6 +157,15 @@ public class ProductServiceImpl implements ProductService {
         R r = R.ok(pictureList);
 
         log.info("ProductServiceImpl.pictures业务结束，结果：{}", r);
+
+        return r;
+    }
+
+    @Cacheable(value = "list.product", key = "#productParamsSearch.search+'-'+#productParamsSearch.pageSize+'-'+#productParamsSearch.currentPage")
+    @Override
+    public Object search(ProductParamsSearch productParamsSearch) {
+        R r = searchClient.search(productParamsSearch);
+        log.info("ProductServiceImpl.search业务结束，结果:{}", r);
 
         return r;
     }

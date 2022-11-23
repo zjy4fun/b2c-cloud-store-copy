@@ -2,6 +2,7 @@ package org.example.controller;
 
 import org.example.param.ProductHotParam;
 import org.example.param.ProductParamInteger;
+import org.example.param.ProductParamsSearch;
 import org.example.param.ProductPromoParam;
 import org.example.service.ProductService;
 import org.example.utils.R;
@@ -68,5 +69,10 @@ public class ProductController {
     public Object productPictures(@RequestBody Map<String, Integer> param) {
         Integer productID = param.get("productID");
         return productService.pictures(productID);
+    }
+
+    @PostMapping("search")
+    public Object search(@RequestBody ProductParamsSearch productParamsSearch) {
+        return productService.search(productParamsSearch);
     }
 }
