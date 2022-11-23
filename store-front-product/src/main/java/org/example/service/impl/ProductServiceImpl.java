@@ -5,9 +5,11 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.example.clients.CategoryClient;
+import org.example.mapper.PictureMapper;
 import org.example.mapper.ProductMapper;
 import org.example.param.ProductHotParam;
 import org.example.param.ProductParamInteger;
+import org.example.pojo.Picture;
 import org.example.pojo.Product;
 import org.example.service.ProductService;
 import org.example.utils.R;
@@ -27,6 +29,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductMapper productMapper;
+
+    @Autowired
+    private PictureMapper pictureMapper;
 
     @Override
     public R promo(String categoryName) {
@@ -134,5 +139,19 @@ public class ProductServiceImpl implements ProductService {
         log.info("ProductServiceImpl.detail业务结束，结果：{}", ok);
 
         return ok;
+    }
+
+    @Override
+    public Object pictures(Integer productID) {
+        //参数封装
+        QueryWrapper<Picture> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("product_id", productID);
+        //数据库查询
+        List<Picture> pictureList = pictureMapper.selectList(queryWrapper);
+        R r = R.ok(pictureList);
+
+        log.info("ProductServiceImpl.pictures业务结束，结果：{}", r);
+
+        return r;
     }
 }

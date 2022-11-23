@@ -63,4 +63,10 @@ public class ProductController {
         Integer productID = param.get("productID");
         return productService.detail(productID);
     }
+
+    @PostMapping("pictures")
+    public Object productPictures(@RequestBody Map<String, Integer> param) {
+        Integer productID = param.get("productID");
+        return productService.pictures(productID);
+    }
 }

@@ -40,4 +40,11 @@ public interface ProductService {
      * @return
      */
     Object detail(Integer productID);
+
+    /**
+     * 查询商品图片
+     * @param productID
+     * @return
+     */
+    Object pictures(Integer productID);
 }
