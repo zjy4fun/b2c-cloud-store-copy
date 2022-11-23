@@ -12,4 +12,10 @@ public interface ProductService {
      * @return
      */
     R hots(ProductHotParam productHotParam);
+
+    /**
+     * 查询类别商品集合
+     * @return
+     */
+    R clist();
 }

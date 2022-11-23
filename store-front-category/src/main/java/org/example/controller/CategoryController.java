@@ -38,4 +38,9 @@ public class CategoryController {
 
         return categoryService.hotsCategory(productHotParam);
     }
+
+    @GetMapping("list")
+    public R list() {
+        return categoryService.list();
+    }
 }
