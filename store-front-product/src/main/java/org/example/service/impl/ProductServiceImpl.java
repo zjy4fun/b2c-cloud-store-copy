@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.clients.CategoryClient;
 import org.example.mapper.ProductMapper;
 import org.example.param.ProductHotParam;
+import org.example.param.ProductParamInteger;
 import org.example.pojo.Product;
 import org.example.service.ProductService;
 import org.example.utils.R;
@@ -26,6 +27,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductMapper productMapper;
+
     @Override
     public R promo(String categoryName) {
         R r = categoryClient.byName(categoryName);
@@ -55,9 +57,10 @@ public class ProductServiceImpl implements ProductService {
 
     /**
      * 多类别热门商品查询，根据类别名称集合，至多查询 7 条
-     *    1. 调用类别服务
-     *    2. 类别集合 id 查询商品
-     *    3. 结果集封装即可
+     * 1. 调用类别服务
+     * 2. 类别集合 id 查询商品
+     * 3. 结果集封装即可
+     *
      * @param productHotParam 类别名称集合
      * @return r
      */
@@ -68,7 +71,7 @@ public class ProductServiceImpl implements ProductService {
             log.info("ProductServiceImpl.hots业务结束，结果:{}", r.getMsg());
             return r;
         }
-        List<Object> ids = (List<Object>)r.getData();
+        List<Object> ids = (List<Object>) r.getData();
 
         //进行商品数据查询
         QueryWrapper<Product> queryWrapper = new QueryWrapper<>();
@@ -93,5 +96,34 @@ public class ProductServiceImpl implements ProductService {
         R r = categoryClient.list();
         log.info("ProductServiceImpl.clist业务结束，结果：{}", r);
         return r;
+    }
+
+    @Override
+    public Object byCategory(ProductParamInteger productParamInteger) {
+        //1. 拆分请求参数
+        List<Integer> categoryID = productParamInteger.getCategoryID();
+        int currentPage = productParamInteger.getCurrentPage();
+        int pageSize = productParamInteger.getPageSize();
+        //2. 请求条件封装
+        QueryWrapper<Product> productQueryWrapper = new QueryWrapper<>();
+        if (categoryID != null && categoryID.size() > 0) {
+            productQueryWrapper.in("category_id", categoryID);
+        }
+        IPage<Product> page = new Page<>(currentPage, pageSize);
+        //3. 数据查询
+        IPage<Product> iPage = productMapper.selectPage(page, productQueryWrapper);
+        //4. 结果封装
+        List<Product> productList = iPage.getRecords();
+        long total = iPage.getTotal();
+
+        R ok = R.ok(null, productList, total);
+
+        log.info("ProductServiceImpl.byCategory业务结束，结果：{}", ok);
+        return ok;
+    }
+
+    @Override
+    public Object all(ProductParamInteger productParamInteger) {
+        return byCategory(productParamInteger);
     }
 }

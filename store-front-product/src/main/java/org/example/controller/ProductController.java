@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import org.example.param.ProductHotParam;
+import org.example.param.ProductParamInteger;
 import org.example.param.ProductPromoParam;
 import org.example.service.ProductService;
 import org.example.utils.R;
@@ -38,5 +39,20 @@ public class ProductController {
     @PostMapping("/category/list")
     public R clist() {
         return productService.clist();
+    }
+
+    /**
+     * 类别查询
+     * @param productParamInteger
+     * @return
+     */
+    @PostMapping("bycategory")
+    public Object byCategory(@RequestBody ProductParamInteger productParamInteger) {
+        return productService.byCategory(productParamInteger);
+    }
+
+    @PostMapping("all")
+    public Object all(@RequestBody ProductParamInteger productParamInteger) {
+        return productService.all(productParamInteger);
     }
 }
