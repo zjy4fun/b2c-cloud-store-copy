@@ -1,3 +1,6 @@
+spring:
+  profiles:
+    active: mq  # 激活配置
 ribbon:
   eager-load:
     enabled: true #开启饥饿加载提升第一次访问速度
