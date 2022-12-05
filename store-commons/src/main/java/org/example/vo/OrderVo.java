@@ -7,7 +7,7 @@ import org.example.pojo.Order;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
-public class orderVo extends Order {
+public class OrderVo extends Order {
     @JsonProperty("product_name")
     private String productName;
     @JsonProperty("product_picture")
