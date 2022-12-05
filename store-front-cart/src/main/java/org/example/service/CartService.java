@@ -9,4 +9,6 @@ public interface CartService {
     R list(CartParam cartParam);
 
     R update(CartParam cartParam);
+
+    R remove(CartParam cartParam);
 }

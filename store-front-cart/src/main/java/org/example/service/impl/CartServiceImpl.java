@@ -168,4 +168,20 @@ public class CartServiceImpl implements CartService {
         log.info("CartServiceImpl.update业务结束，结果:{}", ok);
         return ok;
     }
+
+    /**
+     * 移除购物车数据
+     * @param cartParam
+     * @return
+     */
+    @Override
+    public R remove(CartParam cartParam) {
+        //删除参数封装
+        QueryWrapper<Cart> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", cartParam.getUserId());
+        queryWrapper.eq("product_id", cartParam.getProductId());
+        //删除数据
+        cartMapper.delete(queryWrapper);
+        return R.ok("删除数据成功");
+    }
 }

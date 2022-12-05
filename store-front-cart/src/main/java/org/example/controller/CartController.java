@@ -29,4 +29,9 @@ public class CartController {
     public R update(@RequestBody CartParam cartParam) {
         return cartService.update(cartParam);
     }
+
+    @PostMapping("remove")
+    public R remove(@RequestBody CartParam cartParam) {
+        return cartService.remove(cartParam);
+    }
 }
