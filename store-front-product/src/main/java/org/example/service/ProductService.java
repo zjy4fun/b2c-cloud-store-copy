@@ -1,6 +1,7 @@
 package org.example.service;
 
 import org.example.param.ProductHotParam;
+import org.example.param.ProductIdsParam;
 import org.example.param.ProductParamInteger;
 import org.example.param.ProductParamsSearch;
 import org.example.pojo.Product;
@@ -59,4 +60,6 @@ public interface ProductService {
      * @return
      */
     List<Product> list();
+
+    List<Product> ids(ProductIdsParam productIdsParam);
 }

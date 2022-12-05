@@ -9,6 +9,7 @@ import org.example.clients.SearchClient;
 import org.example.mapper.PictureMapper;
 import org.example.mapper.ProductMapper;
 import org.example.param.ProductHotParam;
+import org.example.param.ProductIdsParam;
 import org.example.param.ProductParamInteger;
 import org.example.param.ProductParamsSearch;
 import org.example.pojo.Picture;
@@ -181,5 +182,20 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> list() {
         List<Product> products = productMapper.selectList(null);
         return products;
+    }
+
+    /**
+     * 根据传入的id，查询商品的集合
+     * @param productIdsParam
+     * @return
+     */
+    @Cacheable(value = "list.product", key = "#productIdsParam.productIds")
+    @Override
+    public List<Product> ids(ProductIdsParam productIdsParam) {
+        List<Integer> productIds = productIdsParam.getProductIds();
+        QueryWrapper<Product> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in("product_id", productIds);
+        List<Product> productList = productMapper.selectList(queryWrapper);
+        return productList;
     }
 }

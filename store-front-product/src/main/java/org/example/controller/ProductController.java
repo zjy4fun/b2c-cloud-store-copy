@@ -1,9 +1,6 @@
 package org.example.controller;
 
-import org.example.param.ProductHotParam;
-import org.example.param.ProductParamInteger;
-import org.example.param.ProductParamsSearch;
-import org.example.param.ProductPromoParam;
+import org.example.param.*;
 import org.example.pojo.Product;
 import org.example.service.ProductService;
 import org.example.utils.R;
@@ -78,5 +75,10 @@ public class ProductController {
     @GetMapping("list")
     public List<Product> list() {
         return productService.list();
+    }
+
+    @PostMapping("ids")
+    public List<Product> list(@RequestBody ProductIdsParam productIdsParam) {
+        return productService.ids(productIdsParam);
     }
 }
