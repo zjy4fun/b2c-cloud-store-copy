@@ -1,9 +1,6 @@
 package org.example.service;
 
-import org.example.param.ProductHotParam;
-import org.example.param.ProductIdsParam;
-import org.example.param.ProductParamInteger;
-import org.example.param.ProductParamsSearch;
+import org.example.param.*;
 import org.example.pojo.Product;
 import org.example.utils.R;
 
@@ -62,4 +59,6 @@ public interface ProductService {
     List<Product> list();
 
     List<Product> ids(ProductIdsParam productIdsParam);
+
+    void batchNumber(List<ProductNumberParam> productNumberParams);
 }

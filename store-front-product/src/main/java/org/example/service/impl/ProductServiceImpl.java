@@ -3,15 +3,14 @@ package org.example.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.example.clients.CategoryClient;
 import org.example.clients.SearchClient;
 import org.example.mapper.PictureMapper;
 import org.example.mapper.ProductMapper;
-import org.example.param.ProductHotParam;
-import org.example.param.ProductIdsParam;
-import org.example.param.ProductParamInteger;
-import org.example.param.ProductParamsSearch;
+import org.example.param.*;
 import org.example.pojo.Picture;
 import org.example.pojo.Product;
 import org.example.service.ProductService;
@@ -19,13 +18,17 @@ import org.example.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class ProductServiceImpl implements ProductService {
+public class ProductServiceImpl  extends ServiceImpl<ProductMapper,Product> implements ProductService {
 
     //引入 feign 客户端需要在启动类添加配置注解
     @Autowired
@@ -197,5 +200,35 @@ public class ProductServiceImpl implements ProductService {
         queryWrapper.in("product_id", productIds);
         List<Product> productList = productMapper.selectList(queryWrapper);
         return productList;
+    }
+
+    /**
+     * 修改商品库存
+     * @param productNumberParams
+     */
+    @Override
+    @Transactional
+    public void batchNumber(List<ProductNumberParam> productNumberParams) {
+        /**
+         * 将 productNumberParams 转成 map
+         * 使用 id 作为 key，item 做值， 比较相邻的两次 key，如果相同，去掉重读
+         */
+        Map<Integer, ProductNumberParam> productNumberParamMap = productNumberParams.stream()
+                .collect(Collectors.toMap(ProductNumberParam::getProductId, v -> v));
+
+        //封装商品集合
+        Set<Integer> productIds = productNumberParamMap.keySet();
+
+        List<Product> productList = baseMapper.selectBatchIds(productIds);
+
+        for(Product product : productList){
+            //设置新库存
+            product.setProductNum(product.getProductNum() - productNumberParamMap.get(product.getProductId()).getProductNum());
+            //设置销售量
+            product.setProductSales(product.getProductSales() + productNumberParamMap.get(product.getProductId()).getProductNum());
+        }
+
+        //批量数据更新
+        this.updateBatchById(productList);
     }
 }
