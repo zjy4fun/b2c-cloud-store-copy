@@ -19,4 +19,9 @@ public class CollectController {
     public Object save(@RequestBody CollectParam collectParam){
         return collectService.save(collectParam);
     }
+
+    @PostMapping("list")
+    public Object list(@RequestBody CollectParam collectParam){
+        return collectService.list(collectParam);
+    }
 }
