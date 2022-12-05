@@ -26,7 +26,7 @@ public class CacheConfiguration {
     @Primary //同类型，多个bean，默认生效！默认缓存时间 1 个小时，可以选择
     public RedisCacheManager cacheManagerHour(RedisConnectionFactory redisConnectionFactory) {
         //缓存时间 1 小时
-        RedisCacheConfiguration instanceConfig = instanceConfig(1 * 3600L);
+        RedisCacheConfiguration instanceConfig = instanceConfig(3600L);
         //构建缓存对象
         return RedisCacheManager.builder(redisConnectionFactory).cacheDefaults(instanceConfig).transactionAware().build();
     }
@@ -44,8 +44,6 @@ public class CacheConfiguration {
      * 实例化具体的缓存配置
      *  设置缓存方式为JSON
      *  设置缓存时间  单位秒
-     * @param ttl
-     * @return
      */
     private RedisCacheConfiguration instanceConfig(Long ttl) {
         // 设置 jackson 序列化工具

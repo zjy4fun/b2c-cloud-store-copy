@@ -39,6 +39,7 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private PictureMapper pictureMapper;
 
+    @Cacheable(value = "list.product", key = "#categoryName")
     @Override
     public R promo(String categoryName) {
         R r = categoryClient.byName(categoryName);
@@ -75,6 +76,7 @@ public class ProductServiceImpl implements ProductService {
      * @param productHotParam 类别名称集合
      * @return r
      */
+    @Cacheable(value = "list.product", key = "#productHotParam.categoryName")
     @Override
     public R hots(ProductHotParam productHotParam) {
         R r = categoryClient.hots(productHotParam);
@@ -102,6 +104,7 @@ public class ProductServiceImpl implements ProductService {
         return ok;
     }
 
+    @Cacheable(value = "list.category", key = "#root.methodName")
     @Override
     public R clist() {
         R r = categoryClient.list();
@@ -109,6 +112,7 @@ public class ProductServiceImpl implements ProductService {
         return r;
     }
 
+    @Cacheable(value = "list.product", key = "#productParamInteger.categoryID+" + "'-'+#productParamInteger.currentPage+" + "'-'+#productParamInteger.pageSize")
     @Override
     public Object byCategory(ProductParamInteger productParamInteger) {
         //1. 拆分请求参数
@@ -133,11 +137,13 @@ public class ProductServiceImpl implements ProductService {
         return ok;
     }
 
+    @Cacheable(value = "list.product", key = "#productParamInteger.currentPage+" + "'-'+#productParamInteger.pageSize")
     @Override
     public Object all(ProductParamInteger productParamInteger) {
         return byCategory(productParamInteger);
     }
 
+    @Cacheable(value = "product", key = "#productID")
     @Override
     public Object detail(Integer productID) {
         Product product = productMapper.selectById(productID);
@@ -147,6 +153,7 @@ public class ProductServiceImpl implements ProductService {
         return ok;
     }
 
+    @Cacheable(value = "picture", key = "#productID")
     @Override
     public Object pictures(Integer productID) {
         //参数封装

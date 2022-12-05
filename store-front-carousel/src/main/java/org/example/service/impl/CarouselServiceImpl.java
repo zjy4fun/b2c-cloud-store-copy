@@ -7,6 +7,7 @@ import org.example.pojo.Carousel;
 import org.example.service.CarouselService;
 import org.example.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class CarouselServiceImpl implements CarouselService {
      *      使用 stream 流进行内存数据切割，保留 6 条数据
      * @return
      */
+    @Cacheable(value = "list.carousel", key = "#root.methodName")
     @Override
     public R list() {
         QueryWrapper<Carousel> carouselQueryWrapper = new QueryWrapper<>();
