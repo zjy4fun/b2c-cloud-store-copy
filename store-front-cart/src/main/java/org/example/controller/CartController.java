@@ -24,4 +24,9 @@ public class CartController {
     public R list(@RequestBody CartParam cartParam) {
         return cartService.list(cartParam);
     }
+
+    @PostMapping("update")
+    public R update(@RequestBody CartParam cartParam) {
+        return cartService.update(cartParam);
+    }
 }

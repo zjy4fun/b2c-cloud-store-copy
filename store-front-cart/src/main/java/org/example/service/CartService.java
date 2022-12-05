@@ -7,4 +7,6 @@ public interface CartService {
     R save(CartParam cartParam);
 
     R list(CartParam cartParam);
+
+    R update(CartParam cartParam);
 }

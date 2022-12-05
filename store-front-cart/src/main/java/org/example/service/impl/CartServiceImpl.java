@@ -124,4 +124,48 @@ public class CartServiceImpl implements CartService {
         log.info("CartServiceImpl.list业务结束，结果:{}", ok);
         return ok;
     }
+
+    /**
+     * 修改购物车数量
+     * @param cartParam
+     * @return
+     */
+    @Override
+    public R update(CartParam cartParam) {
+        //1. 查询商品对应的详情
+        List<Integer> ids = new ArrayList<>();
+        ids.add(cartParam.getProductId());
+        ProductIdsParam productIdsParam = new ProductIdsParam();
+        productIdsParam.setProductIds(ids);
+        List<Product> productList = productClient.ids(productIdsParam);
+
+        if (productList == null || productList.size() == 0) {
+            log.info("CartServiceImpl.update业务开始，商品被移除，无法添加！");
+            return R.fail("商品已经被删除，无法添加！");
+        }
+
+        //1. 检查是否已经达到最大库存
+        Product product = productList.get(0);
+        int productNum = product.getProductNum();
+        //2. 对比是否购买数量超出库存
+        if (cartParam.getNum() > productNum) {
+            R fail = R.fail("修改失败，超出库存数量！");
+            log.info("CartServiceImpl.update业务结束，结果:{}", fail);
+            return fail;
+        }
+
+        //3. 数据修改
+        QueryWrapper<Cart> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", cartParam.getUserId());
+        queryWrapper.eq("product_id", cartParam.getProductId());
+        Cart cart = cartMapper.selectOne(queryWrapper);
+
+        cart.setNum(cartParam.getNum());
+
+        cartMapper.updateById(cart);
+        //4. 结果封装
+        R ok = R.ok("购物车数量更新成功");
+        log.info("CartServiceImpl.update业务结束，结果:{}", ok);
+        return ok;
+    }
 }
