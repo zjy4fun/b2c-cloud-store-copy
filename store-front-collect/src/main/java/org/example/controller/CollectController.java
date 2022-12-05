@@ -24,4 +24,9 @@ public class CollectController {
     public Object list(@RequestBody CollectParam collectParam){
         return collectService.list(collectParam);
     }
+
+    @PostMapping("remove")
+    public Object remove(@RequestBody CollectParam collectParam){
+        return collectService.remove(collectParam);
+    }
 }

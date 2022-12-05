@@ -87,4 +87,22 @@ public class CollectServiceImpl implements CollectService {
         //结果封装
         return R.ok(productList);
     }
+
+    /**
+     * 删除收藏接口
+     * @param collectParam
+     * @return
+     */
+    @Override
+    public Object remove(CollectParam collectParam) {
+        QueryWrapper<Collect> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", collectParam.getUserId());
+        queryWrapper.eq("product_id", collectParam.getProductId());
+
+        int rows = collectMapper.delete(queryWrapper);
+
+        log.info("CollectServiceImpl.remove业务结束，结果:{}", rows);
+
+        return R.ok("收藏移除成功!");
+    }
 }

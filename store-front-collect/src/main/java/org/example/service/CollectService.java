@@ -6,4 +6,6 @@ public interface CollectService {
     Object save(CollectParam collectParam);
 
     Object list(CollectParam collectParam);
+
+    Object remove(CollectParam collectParam);
 }
