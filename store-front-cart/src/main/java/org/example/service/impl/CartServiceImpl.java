@@ -1,6 +1,7 @@
 package org.example.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.example.clients.ProductClient;
 import org.example.mapper.CartMapper;
@@ -21,15 +22,17 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class CartServiceImpl implements CartService {
+public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements CartService {
 
     @Autowired
     private ProductClient productClient;
 
     @Autowired
     private CartMapper cartMapper;
+
     /**
      * 添加购物车
+     *
      * @param cartParam
      * @return
      */
@@ -86,6 +89,7 @@ public class CartServiceImpl implements CartService {
 
     /**
      * 查询购物车数据集合
+     *
      * @param cartParam
      * @return
      */
@@ -100,7 +104,7 @@ public class CartServiceImpl implements CartService {
         }
         //封装商品集合，查询商品数据
         List<Integer> ids = new ArrayList<>();
-        for(Cart cart : cartList){
+        for (Cart cart : cartList) {
             ids.add(cart.getProductId());
         }
 
@@ -115,7 +119,7 @@ public class CartServiceImpl implements CartService {
         System.out.println("map = " + map);
         //结果封装
         List<CartVo> list = new ArrayList<>(cartList.size());
-        for(Cart cart : cartList){
+        for (Cart cart : cartList) {
             CartVo cartVo = new CartVo(map.get(cart.getProductId()), cart);
             list.add(cartVo);
         }
@@ -127,6 +131,7 @@ public class CartServiceImpl implements CartService {
 
     /**
      * 修改购物车数量
+     *
      * @param cartParam
      * @return
      */
@@ -171,6 +176,7 @@ public class CartServiceImpl implements CartService {
 
     /**
      * 移除购物车数据
+     *
      * @param cartParam
      * @return
      */
