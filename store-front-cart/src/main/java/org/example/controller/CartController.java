@@ -19,4 +19,9 @@ public class CartController {
     public R save(@RequestBody CartParam cartParam) {
         return cartService.save(cartParam);
     }
+
+    @PostMapping("list")
+    public R list(@RequestBody CartParam cartParam) {
+        return cartService.list(cartParam);
+    }
 }

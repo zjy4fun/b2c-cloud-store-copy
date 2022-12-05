@@ -5,4 +5,6 @@ import org.example.utils.R;
 
 public interface CartService {
     R save(CartParam cartParam);
+
+    R list(CartParam cartParam);
 }

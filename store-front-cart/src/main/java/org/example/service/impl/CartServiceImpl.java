@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -80,5 +82,46 @@ public class CartServiceImpl implements CartService {
         CartVo cartVo = new CartVo(product, cart);
         log.info("CartServiceImpl.save业务结束，结果:{}", cartVo);
         return R.ok(cartVo);
+    }
+
+    /**
+     * 查询购物车数据集合
+     * @param cartParam
+     * @return
+     */
+    @Override
+    public R list(CartParam cartParam) {
+        Integer userId = cartParam.getUserId();
+        QueryWrapper<Cart> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", userId);
+        List<Cart> cartList = cartMapper.selectList(queryWrapper);
+        if (cartList == null || cartList.size() == 0) {
+            return R.ok("购物车没有数据！", cartList);
+        }
+        //封装商品集合，查询商品数据
+        List<Integer> ids = new ArrayList<>();
+        for(Cart cart : cartList){
+            ids.add(cart.getProductId());
+        }
+
+        ProductIdsParam productIdsParam = new ProductIdsParam();
+        productIdsParam.setProductIds(ids);
+
+        List<Product> productList = productClient.ids(productIdsParam);
+
+        //集合转map
+        Map<Integer, Product> map = productList.stream()
+                .collect(Collectors.toMap(Product::getProductId, v -> v));
+        System.out.println("map = " + map);
+        //结果封装
+        List<CartVo> list = new ArrayList<>(cartList.size());
+        for(Cart cart : cartList){
+            CartVo cartVo = new CartVo(map.get(cart.getProductId()), cart);
+            list.add(cartVo);
+        }
+
+        R ok = R.ok(list);
+        log.info("CartServiceImpl.list业务结束，结果:{}", ok);
+        return ok;
     }
 }
