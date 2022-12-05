@@ -19,4 +19,9 @@ public class OrderController {
     public Object save(@RequestBody OrderParam orderParam){
         return orderService.save(orderParam);
     }
+
+    @PostMapping("list")
+    public Object list(@RequestBody OrderParam orderParam) {
+        return orderService.list(orderParam);
+    }
 }

@@ -6,4 +6,6 @@ import org.example.pojo.Order;
 
 public interface OrderService extends IService<Order> {
     Object save(OrderParam orderParam);
+
+    Object list(OrderParam orderParam);
 }

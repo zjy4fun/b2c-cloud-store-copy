@@ -1,22 +1,26 @@
 package org.example.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.example.clients.ProductClient;
 import org.example.mapper.OrderMapper;
 import org.example.param.OrderParam;
+import org.example.param.ProductIdsParam;
 import org.example.param.ProductNumberParam;
 import org.example.pojo.Order;
+import org.example.pojo.Product;
 import org.example.service.OrderService;
 import org.example.utils.R;
 import org.example.vo.CartVo;
+import org.example.vo.OrderVo;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -60,7 +64,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             cartIds.add(cartVo.getId());
             //订单信息保存
             Order order = new Order();
-            order.setOrder_id(ctime);
+            order.setOrderId(ctime);
             order.setUserId(userId);
             order.setOrderTime(ctime);
             order.setProductId(cartVo.getProductID());
@@ -95,6 +99,54 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
         R ok = R.ok("订单生成成功！");
         log.info("OrderServiceImpl.save业务结束，结果:{}", ok);
+        return ok;
+    }
+
+    @Override
+    public Object list(OrderParam orderParam) {
+        Integer userId = orderParam.getUserId();
+        QueryWrapper<Order> orderQueryWrapper = new QueryWrapper<>();
+        orderQueryWrapper.eq("user_id", userId);
+        List<Order> orderList = this.list(orderQueryWrapper);
+
+        Set<Integer> productIds = new HashSet<>();
+        for(Order order : orderList) {
+            productIds.add(order.getProductId());
+        }
+
+        //数据按订单分组
+        Map<Long, List<Order>> listMap = orderList.stream().collect(Collectors.groupingBy(Order::getOrderId));
+
+        //结果集封装
+        ProductIdsParam productIdsParam = new ProductIdsParam();
+        productIdsParam.setProductIds(new ArrayList<>(productIds));
+
+        List<Product> productList = productClient.ids(productIdsParam);
+
+        Map<Integer, Product> productMap = productList.stream().collect(Collectors.toMap(Product::getProductId, v -> v));
+
+        List<List<OrderVo>> result = new ArrayList<>();
+        for(List<Order> orders : listMap.values()) {
+            List<OrderVo> orderVos = new ArrayList<>();
+            for(Order order : orders) {
+                OrderVo orderVo = new OrderVo();
+                Product product = productMap.get(order.getProductId());
+                orderVo.setProductName(product.getProductName());
+                orderVo.setProductPicture(product.getProductPicture());
+                orderVo.setId(order.getId());
+                orderVo.setOrderId(order.getOrderId());
+                orderVo.setOrderTime(order.getOrderTime());
+                orderVo.setProductNum(order.getProductNum());
+                orderVo.setProductId(order.getProductId());
+                orderVo.setProductPrice(order.getProductPrice());
+                orderVo.setUserId(order.getUserId());
+                orderVos.add(orderVo);
+            }
+            result.add(orderVos);
+        }
+
+        R ok = R.ok(result);
+        log.info("OrderServiceImpl.list业务结束，结果:{}", ok);
         return ok;
     }
 }

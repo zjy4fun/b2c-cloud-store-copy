@@ -16,7 +16,7 @@ public class Order implements Serializable {
     @TableId(type = IdType.AUTO)
     private Integer id;
     @JsonProperty("order_id")
-    private Long order_id;//订单编号，选择使用时间戳
+    private Long orderId;//订单编号，选择使用时间戳
     @JsonProperty("user_id")
     private Integer userId;
     @JsonProperty("product_id")
