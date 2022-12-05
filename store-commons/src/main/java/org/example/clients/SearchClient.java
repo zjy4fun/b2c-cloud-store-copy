@@ -11,8 +11,6 @@ public interface SearchClient {
 
     /**
      * 搜索服务 商品查询
-     * @param productParamsSearch
-     * @return
      */
     @PostMapping("/search/product")
     R search(@RequestBody ProductParamsSearch productParamsSearch);
